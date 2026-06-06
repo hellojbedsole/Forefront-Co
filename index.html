@@ -927,12 +927,16 @@
     <p class="cta-sub reveal">
       We're opening the doors to our first 5 Founding Partners. Bold business owners ready to go first. Drop your email to lock in early access, founding pricing, and a direct line to our team.
     </p>
-    <form name="founding-partners" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="https://forefrontco.netlify.app/success.html">
+    <form id="signup-form" name="founding-partners" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleSubmit(event)">
       <input type="hidden" name="form-name" value="founding-partners" />
       <p style="display:none"><input name="bot-field" /></p>
-      <div class="email-form reveal">
+      <div class="email-form reveal" id="form-fields">
         <input type="email" name="email" class="email-input" placeholder="your@email.com" required />
         <button type="submit" class="email-btn">I'm in</button>
+      </div>
+      <div id="form-success" style="display:none; padding: 20px 0;">
+        <p style="font-family: 'Cormorant Garamond', serif; font-size: 28px; font-style: italic; color: #1E2D1F; margin-bottom: 8px;">You're in.</p>
+        <p style="font-size: 14px; color: #4A4A4A;">We'll be in touch soon. You're one of the first. That means something here.</p>
       </div>
     </form>
     <div class="email-fine reveal">No spam. Just the signal when we open.</div>
@@ -947,6 +951,23 @@
 </footer>
 
 <script>
+  // Form submission handler
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const form = event.target;
+    const data = new FormData(form);
+    try {
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(data).toString(),
+      });
+      window.location.href = '/success.html';
+    } catch (error) {
+      window.location.href = '/success.html';
+    }
+  }
+
   // Nav scroll
   const nav = document.getElementById('nav');
   window.addEventListener('scroll', () => {
